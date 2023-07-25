@@ -1,0 +1,98 @@
+{% extends 'index.html' %}
+{% block content %}
+<div class="container">
+    <h1>Detalle de Cotización</h1>
+
+    <h2>Orden de Proforma</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Proforma</th>
+                <th>Fecha de Proforma</th>
+                <th>BU</th>
+                <th>Condición Pago</th>
+                <th>Moneda</th>
+                <th>Validez de O/P</th>
+                <th>Vendedor</th>
+                <th>Correo</th>
+                <th>Celular</th>
+                <th>Actividad</th>
+                <th>Observaciones</th>
+                <!-- Agrega aquí otros campos de la tabla de Proforma -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ cotizacion.proforma }}</td>
+                <td>{{ cotizacion.proforma.fecha }}</td>
+                <td>{{ cotizacion.proforma.bu }}</td>
+                <td>{{ cotizacion.proforma.condicion_pago }}</td>
+                <td>{{ cotizacion.proforma.moneda }}</td>
+                <td>{{ cotizacion.proforma.validez }}</td>
+                <td>{{ cotizacion.proforma.vendedor }}</td>
+                <td>{{ cotizacion.proforma.correo }}</td>
+                <td>{{ cotizacion.proforma.celular }}</td>
+                <td>{{ cotizacion.proforma.actividad }}</td>
+                <td>{{ cotizacion.proforma.observacion }}</td>
+                <!-- Agrega aquí otros campos de la tabla de Proforma -->
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>{{ cotizacion.proforma }}</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Atencion</th>
+                <th>Cliente</th>
+                <th>RUC-DNI</th>
+                <th>Telefono</th>
+                <th>Correo</th>
+                <th>Observacion</th>
+                <!-- Agrega aquí otros campos de la tabla de Cliente -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{cotizacion.cliente.atencion}}</td>
+                <td>{{cotizacion.cliente.cliente}}</td>
+                <td>{{cotizacion.cliente.ruc_dni}}</td>
+                <td>{{cotizacion.cliente.telefono}}</td>
+                <td>{{cotizacion.cliente.correo}}</td>
+                <!-- Agrega aquí otros campos de la tabla de Cliente -->
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Formulario para agregar detalles -->
+    <h2>Detalles de la Cotización</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" class="form-control" id="cantidad" name="cantidad">
+        </div>
+        <div class="form-group">
+            <label for="codigo">Código:</label>
+            <input type="text" class="form-control" id="codigo" name="codigo">
+        </div>
+        <div class="form-group">
+            <label for="descripcion">Descripción:</label>
+            <input type="text" class="form-control" id="descripcion" name="descripcion">
+        </div>
+        <div class="form-group">
+            <label for="precio_unitario">Precio Unitario:</label>
+            <input type="number" class="form-control" id="precio_unitario" name="precio_unitario">
+        </div>
+        <div class="form-group">
+            <label for="disponibilidad">Disponibilidad:</label>
+            <input type="number" class="form-control" id="disponibilidad" name="disponibilidad">
+        </div>
+        <div class="form-group">
+            <label for="precio_total">Precio Total:</label>
+            <input type="number" class="form-control" id="precio_total" name="precio_total">
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar Detalles</button>
+    </form>
+</div>
+{% endblock %}
