@@ -1,13 +1,13 @@
 
+import json
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from .forms import *
 from django.views import View
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import PasswordResetView
-from .forms import ClienteForm, VendedorForm, ProformaForm
-from .models import Cliente, Vendedor, Proforma, Bu, Pago, Moneda
-
+from .forms import ClienteForm, VendedorForm, ProformaForm,CotizacionForm
+from .models import Cliente, Vendedor, Proforma, Bu, Pago, Moneda, descripcionCotizacion
 from django.contrib.auth.decorators import login_required
 
 # Create your views here
@@ -399,9 +399,25 @@ class CotizacionEliminarView(View):
         cotizacion.delete()
         return JsonResponse({'message': 'Cotizacion eliminada correctamente'})
     
+
 def detalle_cotizacion(request, pk):
     cotizacion = get_object_or_404(Cotizacion,pk=pk)
+    detalles = descripcionCotizacion.objects.filter(cotizacion=cotizacion)
+    if request.method == 'POST':
+        form = DescripcionCotizacionForm(request.POST)
+        if form.is_valid():
+            # Guarda los datos en la base de datos
+            nueva_descripcion = form.save(commit=False)
+            nueva_descripcion.cotizacion = cotizacion
+            nueva_descripcion.save()
+
+            # Redirecciona a la misma página para evitar problemas de recarga del formulario
+            return redirect('detalle_cotizacion', pk=pk)
+    else:
+        form = DescripcionCotizacionForm()
     context = {
-        'cotizacion': cotizacion
+        'cotizacion': cotizacion,
+        'detalles':detalles,
+        'form': form
     }
     return render(request, 'detalle_cotizacion.html', context)

@@ -1,7 +1,7 @@
 from datetime import date
 import datetime
 from django import forms
-from .models import Cliente, Cotizacion,Vendedor,Direccion,Moneda,Pago,Bu,Proforma
+from .models import Cliente, Cotizacion,Vendedor,Direccion,Moneda,Pago,Bu,Proforma,piezasRepuesto,descripcionCotizacion
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -76,3 +76,14 @@ class CotizacionForm(forms.ModelForm):
             'proforma': forms.Select(attrs={'class': 'form-control'}),
             'cliente': forms.Select(attrs={'class': 'form-control'}),
         }
+
+class PiezasRepuestoForm(forms.ModelForm):
+    class Meta:
+        model = piezasRepuesto
+        fields = '__all__'
+
+class DescripcionCotizacionForm(forms.ModelForm):
+    class Meta:
+        model = descripcionCotizacion
+        fields = '__all__'
+    

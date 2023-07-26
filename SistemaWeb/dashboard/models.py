@@ -105,7 +105,42 @@ def update_vendedor_info(sender, instance, **kwargs):
     if instance.vendedor:
         instance.correo = instance.vendedor.correo
         instance.celular = instance.vendedor.celular
-
+    
 class Cotizacion(models.Model):
     proforma = models.ForeignKey(Proforma, on_delete=models.CASCADE)
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Cotización-{self.id}"
+    
+
+class piezasRepuesto(models.Model):
+    nombre = models.CharField(max_length=200)
+    codigo = models.CharField(max_length=200)
+    descripcion = models.ImageField(upload_to='descPiezas/', null=True , blank=True)
+    imagen_tienda = models.ImageField(upload_to='imgPiezas/', null=True , blank=True)
+    precio_soles = models.DecimalField(max_digits=10,decimal_places=2,null=True,blank=True)
+    def __str__(self):
+        return self.nombre
+
+class descripcionCotizacion(models.Model):
+    cotizacion = models.ForeignKey(Cotizacion, on_delete=models.CASCADE)
+    cantidad = models.IntegerField()
+    codigo = models.CharField(max_length=20,null=True,blank=True)
+    descripcion = models.ForeignKey(piezasRepuesto,on_delete=models.CASCADE)
+    precio_unitario = models.DecimalField(max_digits=10,decimal_places=2,null=True,blank=True)
+    disponibilidad = models.CharField(max_length=20)
+    precio_total = models.DecimalField(max_digits=10,decimal_places=2,null=True,blank=True)
+
+@receiver(pre_save, sender=descripcionCotizacion)
+def update_descripcionCotizacion_info(sender, instance, **kwargs):
+    descripcion_repuesto = instance.descripcion
+    if descripcion_repuesto:
+        instance.codigo = descripcion_repuesto.codigo
+        instance.precio_unitario = descripcion_repuesto.precio_soles
+
+@receiver(pre_save, sender=descripcionCotizacion)
+def update_precio_total(sender, instance, **kwargs):
+    if instance.cantidad is not None and instance.precio_unitario is not None:
+        instance.precio_total = instance.cantidad * instance.precio_unitario
+    
